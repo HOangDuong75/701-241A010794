@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập 1: Danh Sách Sản Phẩm eSports - Đề thi Lập trình Web</title>
+  <meta name="description" content="Bài tập 1: Hiển thị mảng sản phẩm eSports, responsive grid, tìm kiếm không phân biệt hoa thường, chống XSS injection.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION MENU -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="brand-badge">WEB 701</span>
+        <span>Lê Minh Tài</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="about.html" class="nav-link" id="nav-about">Trả lời Lý thuyết</a></li>
+          <li><a href="baitap23.html" class="nav-link" id="nav-bt23">Bài tập 23</a></li>
+          <li><a href="baitap22.html" class="nav-link" id="nav-bt22">Bài tập 22</a></li>
+          <li><a href="contact.html" class="nav-link" id="nav-contact">Thông tin Điểm danh</a></li>
+          <li><a href="baitap01.html" class="nav-link active" id="nav-bt01">Bài tập 1 - Sản phẩm</a></li>
+          <li><a href="baitap02.html" class="nav-link" id="nav-bt02">Bài tập 2 - Form</a></li>
+          <li><a href="baitap03.html" class="nav-link" id="nav-bt03">Bài tập 3 - Đồng hồ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-badge">Bài Tập Thực Hành 01</span>
+        <h1 class="page-title">Cửa Hàng Vật Phẩm eSports Chuyên Nghiệp</h1>
+        <p class="page-desc">Hệ thống danh mục 5 vật phẩm thi đấu gaming. Tích hợp bộ lọc tìm kiếm thời gian thực, responsive CSS Grid và kỹ thuật lọc an toàn chuẩn bảo mật.</p>
+      </section>
+
+      <!-- SEARCH BAR SECTION -->
+      <section style="margin-bottom: 2rem;">
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input" 
+            placeholder="Tìm kiếm vật phẩm (ví dụ: Áo đấu SGP, Lauriel, bàn phím, lót chuột...)"
+            autocomplete="off"
+            aria-label="Tìm kiếm sản phẩm"
+          >
+        </div>
+        <div style="text-align: center; margin-top: 0.75rem;">
+          <span style="font-size: 0.85rem; color: var(--text-dim);" id="search-result-count">Hiển thị 5 / 5 sản phẩm</span>
+        </div>
+      </section>
+
+      <!-- PRODUCT LIST GRID -->
+      <section id="products-container" class="products-grid" aria-live="polite">
+        <!-- Render động bằng JavaScript -->
+      </section>
+
+      <!-- KHÔNG GIAN THÔNG BÁO LỖI / KHÔNG TÌM THẤY SẢN PHẨM -->
+      <div id="no-results" class="empty-state" style="display: none;">
+        <div class="empty-state-icon">⚠️</div>
+        <h3 style="font-size: 1.25rem; color: #fff; margin-bottom: 0.5rem;" id="no-results-title">Không tìm thấy sản phẩm phù hợp!</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem;" id="no-results-desc">
+          Vui lòng thử lại với từ khóa khác hoặc xóa bộ lọc tìm kiếm.
+        </p>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-reset-search">Xóa Tìm Kiếm</button>
+      </div>
+
+      <!-- ĐẶC BIỆT: GIẢI THÍCH LOGIC TƯ DUY LẬP TRÌNH -->
+      <section class="logic-explanation-box">
+        <h3 class="logic-box-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 18H10v-1h4v1zm0-3H10v-1h4v1zm-2-15C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
+          Giải thích logic tư duy lập trình: Chống XSS & Tối ưu Tìm kiếm
+        </h3>
+        <ul>
+          <li>
+            <strong>1. Cơ chế phòng vệ tấn công XSS (Cross-Site Scripting Injection):</strong><br>
+            • Khi người dùng nhập chuỗi độc hại vào ô input (ví dụ: <code>&lt;img src=x onerror=alert('Hacked')&gt;</code>), nếu lập trình viên dùng <code>container.innerHTML = `Kết quả cho: ${keyword}`</code>, trình duyệt sẽ phân tích cú pháp HTML và ngay lập tức thực thi đoạn script độc hại.<br>
+            • <em>Giải pháp an toàn tuyệt đối:</em> Sử dụng thuộc tính <code>element.textContent = keyword</code> hoặc tạo text node bằng <code>document.createTextNode(keyword)</code> khi in lại từ khóa người dùng tìm kiếm. Trình duyệt sẽ mã hóa tự động chuỗi đó thành văn bản thuần túy (plain text), triệt tiêu hoàn toàn khả năng tiêm mã độc XSS.
+          </li>
+          <li>
+            <strong>2. Chuẩn hóa dữ liệu tìm kiếm (Case-insensitive & Trimming):</strong><br>
+            • Sử dụng <code>keyword.trim().toLowerCase()</code> và so khớp với <code>product.name.toLowerCase().includes(...)</code>. Phương pháp này đảm bảo kết quả tìm kiếm chính xác bất kể người dùng gõ chữ HOA, chữ thường hay nhập thừa dấu khoảng trắng đầu/cuối.
+          </li>
+          <li>
+            <strong>3. Tối ưu hiệu năng tìm kiếm với Debounce (Debouncing Technique):</strong><br>
+            • Khi người dùng gõ phím liên tục, nếu sự kiện <code>input</code> gọi hàm lọc và vẽ lại DOM sau mỗi ký tự sẽ gây nghẽn luồng xử lý và giật khung hình (frame drop).<br>
+            • Thuật toán Debounce tạo một bộ đếm thời gian (300ms). Nếu người dùng tiếp tục gõ, timer cũ bị hủy và thiết lập lại timer mới. Việc tìm kiếm và render chỉ chạy một lần duy nhất sau khi người dùng dừng thao tác gõ phím.
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- TOAST THÔNG BÁO THÊM GIỎ HÀNG -->
+  <div id="cart-toast" class="toast-notice">
+    <span>🛒</span>
+    <span id="toast-message">Đã thêm vật phẩm vào giỏ hàng thành công!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Bài thi môn: <strong>Lập Trình Web (Học phần 701)</strong> — Đề số 1</p>
+      <p>Thực hiện bởi: <span class="footer-highlight">Lê Minh Tài</span> | Mã SV: <span class="footer-highlight">241A010794</span></p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT XỬ LÝ SẢN PHẨM VÀ TÌM KIẾM AN TOÀN -->
+  <script>
+    // 1. MẢNG DỮ LIỆU 5 SẢN PHẨM CHỦ ĐỀ ESPORTS THEO ĐỀ BÀI
+    const productsData = [
+      {
+        id: 1,
+        name: "Áo đấu đội SGP (Saigon Phantom Pro Kit 2024)",
+        category: "Trang phục thi đấu",
+        price: 450000,
+        badge: "Best Seller",
+        icon: "👕",
+        desc: "Áo đấu chính thức giải Đấu Trường Danh Vọng, chất liệu thun lạnh thoáng khí, in logo SGP hologram phản quang cao cấp."
+      },
+      {
+        id: 2,
+        name: "Mô hình Lauriel Thứ Nguyên Vệ Thần",
+        category: "Mô hình sưu tầm",
+        price: 1850000,
+        badge: "Limited Edition",
+        icon: "🧚‍♀️",
+        desc: "Mô hình tỉ lệ 1/7 cao cấp, chi tiết hiệu ứng cánh thiên thần trong suốt, đế đèn LED RGB tích hợp âm thanh chuyển động."
+      },
+      {
+        id: 3,
+        name: "Lót chuột Gaming Speed",
+        category: "Phụ kiện Gaming",
+        price: 250000,
+        badge: "Hot Item",
+        icon: "🐧",
+        desc: "Pad chuột kích thước siêu lớn 900x400x4mm, bề mặt dệt micro-woven chuyên dụng cho game FPS, viền bo chỉ RGB chống bong tróc."
+      },
+      {
+        id: 4,
+        name: "Khung tranh chim cánh cụt chibi LED RGB",
+        category: "Decor Phòng Game",
+        price: 320000,
+        badge: "New",
+        icon: "🖼️",
+        desc: "Tranh khắc mica hiệu ứng neon gaming 3D, họa tiết mascot cánh cụt chibi gamer, có điều khiển đổi 16 triệu màu qua Remote."
+      },
+      {
+        id: 5,
+        name: "Bàn phím cơ Custom Switch Cream Yellow",
+        category: "Thiết bị ngoại vi",
+        price: 1450000,
+        badge: "Premium",
+        icon: "⌨️",
+        desc: "Layout TKL 87 phím, hotswap 5 pin, switch mượt mà đã lube sẵn, keycap PVD in hình chibi penguin độc quyền."
+      }
+    ];
+
+    // 2. KHỞI TẠO CÁC PHẦN TỬ DOM
+    const productsContainer = document.getElementById('products-container');
+    const searchInput = document.getElementById('search-input');
+    const noResultsDiv = document.getElementById('no-results');
+    const noResultsDesc = document.getElementById('no-results-desc');
+    const btnResetSearch = document.getElementById('btn-reset-search');
+    const searchResultCount = document.getElementById('search-result-count');
+    const cartToast = document.getElementById('cart-toast');
+
+    // Hàm format định dạng tiền tệ VNĐ
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    }
+
+    // 3. HÀM RENDER DANH SÁCH SẢN PHẨM VÀO DOM
+    function renderProducts(list) {
+      // Dọn sạch danh sách cũ
+      productsContainer.innerHTML = '';
+
+      if (list.length === 0) {
+        productsContainer.style.display = 'none';
+        noResultsDiv.style.display = 'block';
+        return;
+      }
+
+      productsContainer.style.display = 'grid';
+      noResultsDiv.style.display = 'none';
+
+      // Duyệt mảng và xây dựng phần tử DOM
+      list.forEach(product => {
+        const card = document.createElement('article');
+        card.className = 'product-card';
+        card.setAttribute('data-id', product.id);
+
+        card.innerHTML = `
+          <span class="product-badge-tag">${product.badge}</span>
+          <div class="product-img-box">
+            <span class="product-icon-avatar" aria-hidden="true">${product.icon}</span>
+          </div>
+          <div class="product-body">
+            <span class="product-category">${product.category}</span>
+            <h3 class="product-title">${product.name}</h3>
+            <p class="product-desc">${product.desc}</p>
+            <div class="product-footer">
+              <span class="product-price">${formatCurrency(product.price)}</span>
+              <button type="button" class="btn btn-primary btn-sm btn-add-cart" data-name="${product.name}">
+                Mua Ngay
+              </button>
+            </div>
+          </div>
+        `;
+
+        productsContainer.appendChild(card);
+      });
+    }
+
+    // 4. HÀM TÌM KIẾM AN TOÀN (CASE-INSENSITIVE + XSS-SAFE)
+    function handleSearch() {
+      const rawInput = searchInput.value;
+      const normalizedQuery = rawInput.trim().toLowerCase();
+
+      // Lọc danh sách sản phẩm theo tên không phân biệt hoa thường
+      const filtered = productsData.filter(product => {
+        return product.name.toLowerCase().includes(normalizedQuery);
+      });
+
+      // Cập nhật số lượng
+      searchResultCount.textContent = `Hiển thị ${filtered.length} / ${productsData.length} sản phẩm`;
+
+      // Nếu không có sản phẩm: Xử lý hiển thị thông báo lỗi AN TOÀN TUYỆT ĐỐI (TRÁNH XSS)
+      if (filtered.length === 0) {
+        // Dùng textContent / createTextNode để chống injection nếu người dùng nhập mã HTML độc
+        noResultsDesc.textContent = '';
+        noResultsDesc.appendChild(document.createTextNode('Không tìm thấy kết quả nào phù hợp với từ khóa: "'));
+        
+        const highlightSpan = document.createElement('strong');
+        highlightSpan.style.color = 'var(--accent-gold)';
+        highlightSpan.textContent = rawInput; // textContent tự động escape ký tự HTML < > & " '
+        noResultsDesc.appendChild(highlightSpan);
+        
+        noResultsDesc.appendChild(document.createTextNode('". Vui lòng kiểm tra lại chính tả hoặc thử lại.'));
+      }
+
+      // Render lại danh sách
+      renderProducts(filtered);
+    }
+
+    // 5. KỸ THUẬT DEBOUNCE TỐI ƯU HIỆU NĂNG GÕ PHÍM
+    function debounce(callback, delay = 250) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          callback.apply(this, args);
+        }, delay);
+      };
+    }
+
+    // Gán sự kiện tìm kiếm với Debounce
+    searchInput.addEventListener('input', debounce(handleSearch, 200));
+
+    // Nút xóa bộ lọc
+    btnResetSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      handleSearch();
+      searchInput.focus();
+    });
+
+    // 6. ÁP DỤNG EVENT DELEGATION CHO NÚT BẤM "MUA NGAY"
+    productsContainer.addEventListener('click', (event) => {
+      const btn = event.target.closest('.btn-add-cart');
+      if (btn) {
+        const prodName = btn.dataset.name;
+        showToast(`Đã thêm "${prodName}" vào giỏ hàng!`);
+      }
+    });
+
+    // Hàm hiển thị Toast thông báo
+    let toastTimeout;
+    function showToast(msg) {
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = msg;
+      cartToast.classList.add('show');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        cartToast.classList.remove('show');
+      }, 2500);
+    }
+
+    // 7. KHỞI CHẠY LẦN ĐẦU
+    renderProducts(productsData);
+  </script>
+
+</body>
+</html>

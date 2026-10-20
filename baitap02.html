@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập 2: Form Đăng Ký Tài Khoản - Đề thi Lập trình Web</title>
+  <meta name="description" content="Bài tập 2: Form đăng ký tài khoản gaming chuẩn UI/UX, validate regex JavaScript, lưu trữ LocalStorage an toàn.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION MENU -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="brand-badge">WEB 701</span>
+        <span>Lê Minh Tài</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="about.html" class="nav-link" id="nav-about">Trả lời Lý thuyết</a></li>
+          <li><a href="baitap23.html" class="nav-link" id="nav-bt23">Bài tập 23</a></li>
+          <li><a href="baitap22.html" class="nav-link" id="nav-bt22">Bài tập 22</a></li>
+          <li><a href="contact.html" class="nav-link" id="nav-contact">Thông tin Điểm danh</a></li>
+          <li><a href="baitap01.html" class="nav-link" id="nav-bt01">Bài tập 1 - Sản phẩm</a></li>
+          <li><a href="baitap02.html" class="nav-link active" id="nav-bt02">Bài tập 2 - Form</a></li>
+          <li><a href="baitap03.html" class="nav-link" id="nav-bt03">Bài tập 3 - Đồng hồ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="container" style="max-width: 800px;">
+      
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-badge">Bài Tập Thực Hành 02</span>
+        <h1 class="page-title">Đăng Ký Thành Viên Clan eSports</h1>
+        <p class="page-desc">Biểu mẫu đăng ký bảo mật với kiểm tra định dạng email và mật khẩu thời gian thực, lưu trữ dữ liệu vào LocalStorage và hiển thị phản hồi.</p>
+      </section>
+
+      <!-- REGISTRATION FORM CARD -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <form id="register-form" novalidate>
+          
+          <!-- HỌ VÀ TÊN -->
+          <div class="form-group">
+            <label for="fullname" class="form-label">Họ và tên thành viên <span style="color: var(--color-danger)">*</span></label>
+            <input 
+              type="text" 
+              id="fullname" 
+              class="form-control" 
+              placeholder="Ví dụ: Nguyễn Văn A (Pro Gamer)"
+              autocomplete="name"
+            >
+            <span class="error-message" id="error-fullname"></span>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group">
+            <label for="email" class="form-label">Địa chỉ Email <span style="color: var(--color-danger)">*</span></label>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-control" 
+              placeholder="name@domain.com"
+              autocomplete="email"
+            >
+            <span class="error-message" id="error-email"></span>
+          </div>
+
+          <!-- MẬT KHẨU (ẨN) CÓ NÚT XEM/ẨN TIỆN LỢI -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <label for="password" class="form-label" style="margin-bottom: 0;">Mật khẩu bảo mật <span style="color: var(--color-danger)">*</span></label>
+              <button type="button" id="btn-toggle-pwd" class="btn btn-outline btn-sm" style="padding: 0.15rem 0.6rem; font-size: 0.75rem;">
+                👁️ Hiện mật khẩu
+              </button>
+            </div>
+            <input 
+              type="password" 
+              id="password" 
+              class="form-control" 
+              placeholder="Tối thiểu 8 ký tự, gồm chữ HOA, chữ thường và chữ số"
+              autocomplete="new-password"
+            >
+            <span class="error-message" id="error-password"></span>
+            <small style="color: var(--text-dim); font-size: 0.8rem; display: block; margin-top: 0.25rem;">
+              Yêu cầu: Từ 8 ký tự trở lên, chứa ít nhất 1 chữ hoa (A-Z), 1 chữ thường (a-z) và 1 chữ số (0-9).
+            </small>
+          </div>
+
+          <!-- CHECKBOX ĐỒNG Ý ĐIỀU KHOẢN -->
+          <div class="form-group" style="margin-top: 1.5rem;">
+            <label class="form-checkbox">
+              <input type="checkbox" id="terms-agree">
+              <span>Tôi đã đọc và hoàn toàn đồng ý với các <strong>Điều khoản dịch vụ & Quy tắc thi đấu eSports</strong></span>
+            </label>
+            <span class="error-message" id="error-terms" style="margin-left: 1.8rem;"></span>
+          </div>
+
+          <!-- NÚT GỬI FORM -->
+          <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" id="btn-submit" style="flex: 1;">
+              ⚡ Hoàn Tất Đăng Ký
+            </button>
+            <button type="reset" class="btn btn-secondary" id="btn-reset">
+              Đặt Lại
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- DANH SÁCH TÀI KHOẢN ĐÃ LƯU TRONG LOCALSTORAGE -->
+      <section class="card" style="margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.2rem; color: var(--accent-gold-light);">Dữ Liệu LocalStorage Đã Ghi Nhận</h2>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-storage" style="font-size: 0.75rem;">
+            🗑️ Xóa Bộ Nhớ Cục Bộ
+          </button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+          Bảng dưới đây truy xuất trực tiếp các bản ghi hợp lệ đã được lưu trữ trong <code>window.localStorage</code> của trình duyệt:
+        </p>
+
+        <div class="table-responsive">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Họ và Tên</th>
+                <th>Email Đăng Ký</th>
+                <th>Thời Gian Ghi Nhận</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="registered-users-table">
+              <!-- Render tự động từ LocalStorage -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ĐẶC BIỆT: GIẢI THÍCH LOGIC TƯ DUY -->
+      <section class="logic-explanation-box">
+        <h3 class="logic-box-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 18H10v-1h4v1zm0-3H10v-1h4v1zm-2-15C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
+          Giải thích logic tư duy: Xử lý Submit Event & An ninh Lưu trữ Cục bộ (LocalStorage)
+        </h3>
+        <ul>
+          <li>
+            <strong>1. Xử lý ngăn ngừa hành vi mặc định với <code>event.preventDefault()</code>:</strong><br>
+            • Khi người dùng nhấn nút Submit hoặc ấn Enter, hành vi mặc định của thẻ <code>&lt;form&gt;</code> là gửi yêu cầu HTTP (GET/POST) và tải lại toàn bộ trang web (page reload).<br>
+            • Gọi lệnh <code>event.preventDefault()</code> tại dòng đầu tiên của hàm xử lý giúp chặn lại hành vi reload, cho phép JavaScript hoàn toàn làm chủ luồng xử lý: kiểm tra tính hợp lệ dữ liệu (Client-side Validation), hiển thị lỗi tức thì mà không làm mất dữ liệu người dùng vừa nhập, và thực hiện lưu trữ hoặc gửi AJAX ngầm.
+          </li>
+          <li>
+            <strong>2. Nguyên tắc bảo mật sống còn khi dùng LocalStorage:</strong><br>
+            • <strong>Rủi ro rò rỉ:</strong> Dữ liệu lưu trong <code>localStorage</code> là dữ liệu văn bản thuần (plain text), không được mã hóa và không có cơ chế bảo vệ theo phiên. Bất kỳ đoạn mã JavaScript nào (kể cả thư viện bên thứ ba hoặc script bị chèn qua lỗ hổng XSS) đều có thể gọi <code>localStorage.getItem()</code> để đánh cắp dữ liệu.<br>
+            • <strong>Quy tắc thực tế:</strong> <em>TUYỆT ĐỐI KHÔNG</em> lưu mật khẩu nguyên bản (plaintext password), mã PIN hoặc Private Access Token dài hạn vào LocalStorage. Trong mã nguồn này, ta chỉ lưu thông tin nhận diện cơ bản (Tên, Email, Timestamp) và bảo mật tuyệt đối chuỗi mật khẩu. Trong các hệ thống production, phiên đăng nhập phải được xác thực bằng HTTP-Only Secure Cookies để trình duyệt ngăn chặn mã JavaScript độc hại truy cập.
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- TOAST THÔNG BÁO THÀNH CÔNG -->
+  <div id="form-toast" class="toast-notice" style="background: #10b981;">
+    <span>🎉</span>
+    <span id="toast-text">Đăng ký tài khoản thành công! Dữ liệu đã lưu vào LocalStorage.</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Bài thi môn: <strong>Lập Trình Web (Học phần 701)</strong> — Đề số 1</p>
+      <p>Thực hiện bởi: <span class="footer-highlight">Lê Minh Tài</span> | Mã SV: <span class="footer-highlight">241A010794</span></p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT VALIDATION & LOCALSTORAGE PERSISTENCE -->
+  <script>
+    // 1. CÁC BIẾN DOM THAM CHIẾU
+    const form = document.getElementById('register-form');
+    const fullnameInput = document.getElementById('fullname');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const termsAgree = document.getElementById('terms-agree');
+    const btnTogglePwd = document.getElementById('btn-toggle-pwd');
+    const formToast = document.getElementById('form-toast');
+    const toastText = document.getElementById('toast-text');
+    const usersTableBody = document.getElementById('registered-users-table');
+    const btnClearStorage = document.getElementById('btn-clear-storage');
+
+    // Error message elements
+    const errFullname = document.getElementById('error-fullname');
+    const errEmail = document.getElementById('error-email');
+    const errPassword = document.getElementById('error-password');
+    const errTerms = document.getElementById('error-terms');
+
+    // Key lưu trữ trong LocalStorage
+    const STORAGE_KEY = 'web701_registered_users';
+
+    // 2. TOGGLE HIỆN/ẨN MẬT KHẨU
+    btnTogglePwd.addEventListener('click', () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        btnTogglePwd.textContent = '🔒 Ẩn mật khẩu';
+      } else {
+        passwordInput.type = 'password';
+        btnTogglePwd.textContent = '👁️ Hiện mật khẩu';
+      }
+    });
+
+    // 3. BIỂU THỨC CHÍNH QUY (REGEX) KIỂM TRA
+    // Email regex tiêu chuẩn RFC: user@domain.extension
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    // Mật khẩu: Ít nhất 8 ký tự, có ít nhất 1 chữ hoa, 1 chữ thường, 1 số
+    const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    // 4. HÀM VALIDATE TỪNG TRƯỜNG DỮ LIỆU
+    function validateForm() {
+      let isValid = true;
+
+      // Reset tất cả thông báo lỗi cũ
+      errFullname.textContent = '';
+      errEmail.textContent = '';
+      errPassword.textContent = '';
+      errTerms.textContent = '';
+
+      fullnameInput.classList.remove('is-invalid');
+      emailInput.classList.remove('is-invalid');
+      passwordInput.classList.remove('is-invalid');
+
+      // Validate Họ và tên
+      const fullnameVal = fullnameInput.value.trim();
+      if (!fullnameVal) {
+        errFullname.textContent = 'Vui lòng nhập họ và tên của bạn!';
+        fullnameInput.classList.add('is-invalid');
+        isValid = false;
+      } else if (fullnameVal.length < 2) {
+        errFullname.textContent = 'Họ và tên quá ngắn (tối thiểu 2 ký tự)!';
+        fullnameInput.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      // Validate Email
+      const emailVal = emailInput.value.trim();
+      if (!emailVal) {
+        errEmail.textContent = 'Vui lòng nhập địa chỉ email!';
+        emailInput.classList.add('is-invalid');
+        isValid = false;
+      } else if (!EMAIL_REGEX.test(emailVal)) {
+        errEmail.textContent = 'Định dạng email không hợp lệ (Ví dụ hợp lệ: name@domain.com)!';
+        emailInput.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      // Validate Mật khẩu
+      const passwordVal = passwordInput.value;
+      if (!passwordVal) {
+        errPassword.textContent = 'Vui lòng nhập mật khẩu bảo mật!';
+        passwordInput.classList.add('is-invalid');
+        isValid = false;
+      } else if (passwordVal.length < 8) {
+        errPassword.textContent = 'Mật khẩu phải chứa ít nhất 8 ký tự!';
+        passwordInput.classList.add('is-invalid');
+        isValid = false;
+      } else if (!PASSWORD_REGEX.test(passwordVal)) {
+        errPassword.textContent = 'Mật khẩu chưa đủ mạnh: Cần có cả chữ HOA, chữ thường và chữ số!';
+        passwordInput.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      // Validate Checkbox điều khoản
+      if (!termsAgree.checked) {
+        errTerms.textContent = 'Bạn bắt buộc phải đánh dấu đồng ý với các điều khoản!';
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // 5. QUẢN LÝ DỮ LIỆU LOCALSTORAGE
+    function getStoredUsers() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error('Không thể đọc dữ liệu LocalStorage:', e);
+        return [];
+      }
+    }
+
+    function saveUserToStorage(user) {
+      try {
+        const users = getStoredUsers();
+        users.unshift(user); // Thêm lên đầu danh sách
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      } catch (e) {
+        console.error('Không thể ghi dữ liệu vào LocalStorage:', e);
+      }
+    }
+
+    // 6. RENDER BẢNG DỮ LIỆU ĐÃ ĐĂNG KÝ
+    function renderUsersTable() {
+      const users = getStoredUsers();
+      usersTableBody.innerHTML = '';
+
+      if (users.length === 0) {
+        usersTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--text-dim); padding: 1.5rem;">
+              Chưa có dữ liệu người dùng nào trong LocalStorage. Hãy đăng ký ngay ở form phía trên!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      users.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-family: var(--font-code); color: var(--accent-gold);">${index + 1}</td>
+          <td><strong style="color: #fff;">${escapeHtml(item.fullname)}</strong></td>
+          <td style="font-family: var(--font-code);">${escapeHtml(item.email)}</td>
+          <td style="font-size: 0.8rem; color: var(--text-dim);">${item.registeredAt}</td>
+          <td><span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #10b981; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700;">Hợp lệ</span></td>
+        `;
+        usersTableBody.appendChild(tr);
+      });
+    }
+
+    // Hàm helper chống XSS khi render dữ liệu từ Storage
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // 7. XỬ LÝ SỰ KIỆN SUBMIT FORM
+    form.addEventListener('submit', function(event) {
+      // BƯỚC 1: Ngăn chặn hành vi reload trang mặc định của trình duyệt
+      event.preventDefault();
+
+      // BƯỚC 2: Kiểm tra tính hợp lệ của toàn bộ form
+      if (!validateForm()) {
+        return; // Dừng lại nếu có lỗi
+      }
+
+      // BƯỚC 3: Chuẩn bị đối tượng dữ liệu (TUYỆT ĐỐI KHÔNG LƯU MẬT KHẨU DẠNG RAW ĐỂ BẢO MẬT)
+      const newUser = {
+        fullname: fullnameInput.value.trim(),
+        email: emailInput.value.trim(),
+        registeredAt: new Date().toLocaleString('vi-VN', {
+          hour: '2-digit', minute: '2-digit', second: '2-digit',
+          day: '2-digit', month: '2-digit', year: 'numeric'
+        })
+      };
+
+      // BƯỚC 4: Lưu vào LocalStorage
+      saveUserToStorage(newUser);
+
+      // BƯỚC 5: Reset toàn bộ form về trạng thái rỗng
+      form.reset();
+      passwordInput.type = 'password';
+      btnTogglePwd.textContent = '👁️ Hiện mật khẩu';
+
+      // BƯỚC 6: Cập nhật lại bảng hiển thị
+      renderUsersTable();
+
+      // BƯỚC 7: Kích hoạt thông báo thành công (Toast notification)
+      showFormToast(`Chào mừng "${newUser.fullname}"! Đăng ký tài khoản thành công.`);
+    });
+
+    // Xóa LocalStorage khi cần kiểm thử lại
+    btnClearStorage.addEventListener('click', () => {
+      if (confirm('Bạn có chắc chắn muốn xóa toàn bộ danh sách tài khoản trong LocalStorage?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderUsersTable();
+        showFormToast('Đã xóa sạch bộ nhớ LocalStorage thành công!');
+      }
+    });
+
+    function showFormToast(msg) {
+      toastText.textContent = msg;
+      formToast.classList.add('show');
+      setTimeout(() => {
+        formToast.classList.remove('show');
+      }, 3500);
+    }
+
+    // Khởi chạy nạp bảng khi tải trang
+    renderUsersTable();
+  </script>
+
+</body>
+</html>

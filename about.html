@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trả Lời Lý Thuyết - Đề thi Lập trình Web Đề số 1</title>
+  <meta name="description" content="Phần 1: Trả lời 4 câu hỏi lý thuyết Lập trình Web chi tiết, chuẩn xác, minh họa trực quan.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION MENU -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="brand-badge">WEB 701</span>
+        <span>Lê Minh Tài</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="about.html" class="nav-link active" id="nav-about">Trả lời Lý thuyết</a></li>
+          <li><a href="baitap23.html" class="nav-link" id="nav-bt23">Bài tập 23</a></li>
+          <li><a href="baitap22.html" class="nav-link" id="nav-bt22">Bài tập 22</a></li>
+          <li><a href="contact.html" class="nav-link" id="nav-contact">Thông tin Điểm danh</a></li>
+          <li><a href="baitap01.html" class="nav-link" id="nav-bt01">Bài tập 1 - Sản phẩm</a></li>
+          <li><a href="baitap02.html" class="nav-link" id="nav-bt02">Bài tập 2 - Form</a></li>
+          <li><a href="baitap03.html" class="nav-link" id="nav-bt03">Bài tập 3 - Đồng hồ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="container" style="max-width: 960px;">
+
+      <section class="page-header">
+        <span class="page-badge">Phần 1: Lý Thuyết (40 Điểm)</span>
+        <h1 class="page-title">Trả Lời Câu Hỏi Lý Thuyết Chuyên Sâu</h1>
+        <p class="page-desc">Phân tích toàn diện 4 chuyên đề cốt lõi: Định vị CSS, Triển khai Web & Hosting, Cơ chế JS Engine (Scope/Hoisting), và Kỹ thuật Event Delegation.</p>
+      </section>
+
+      <!-- ==================== CÂU 1 ==================== -->
+      <article class="card" style="margin-bottom: 2.5rem;" id="cau-1">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <span class="brand-badge" style="font-size: 0.85rem; padding: 0.3rem 0.7rem;">CÂU HỎI 1</span>
+          <h2 style="font-size: 1.45rem; color: #fff;">Khác biệt giữa Position: Absolute vs Relative, Ứng dụng Responsive & Ảnh hưởng khi Deploy</h2>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">1. So sánh bản chất Absolute vs Relative</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          Trong CSS, thuộc tính <code>position</code> kiểm soát cách một phần tử được đặt vị trí trên trang:
+        </p>
+
+        <div class="table-responsive" style="margin-bottom: 1.5rem;">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Tiêu chí</th>
+                <th><code>position: relative</code></th>
+                <th><code>position: absolute</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Luồng tài liệu (Normal Flow)</strong></td>
+                <td>Vẫn nằm trong luồng. Không gian ban đầu của phần tử vẫn được giữ nguyên như trước khi dịch chuyển.</td>
+                <td>Bị rút hoàn toàn khỏi luồng văn bản (taken out of flow). Các phần tử khác sẽ chiếm lấy vị trí trống đó.</td>
+              </tr>
+              <tr>
+                <td><strong>Gốc tọa độ tham chiếu (top/right/bottom/left)</strong></td>
+                <td>Tham chiếu theo <strong>chính vị trí ban đầu</strong> của nó trong luồng tài liệu.</td>
+                <td>Tham chiếu theo <strong>phần tử tổ tiên gần nhất</strong> có <code>position</code> khác <code>static</code> (thường là <code>relative</code>). Nếu không có, nó tham chiếu theo <code>&lt;body&gt;</code> hoặc viewport.</td>
+              </tr>
+              <tr>
+                <td><strong>Tác động tới phần tử xung quanh</strong></td>
+                <td>Chỉ thay đổi vị trí thị giác của chính nó, không đẩy hay kéo các thẻ lân cận.</td>
+                <td>Không chiếm không gian vật lý, dễ đè lên hoặc bị đè bởi các thẻ khác (quản lý qua <code>z-index</code>).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">2. Ví dụ thực tế trong thiết kế Responsive: Notification Badge</h3>
+        <p style="color: var(--text-muted); margin-bottom: 0.75rem;">
+          Kỹ thuật kinh điển là kết hợp <code>relative</code> ở thẻ cha làm mốc tọa độ và <code>absolute</code> ở thẻ con để định vị huy hiệu thông báo góc trên bên phải:
+        </p>
+
+        <pre><code>/* Thẻ cha: Container icon chuông thông báo */
+.notification-bell {
+  position: relative; /* Đặt làm mốc tọa độ cho con */
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+}
+
+/* Thẻ con: Huy hiệu số thông báo đỏ */
+.badge-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 9999px;
+  padding: 2px 6px;
+  /* Đảm bảo badge luôn neo chặt vào góc thẻ cha trên mọi độ phân giải màn hình */
+}</code></pre>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">3. Ảnh hưởng và các rủi ro khi Deploy thực tế</h3>
+        <ul style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong>Lỗi "Mất mốc tọa độ" (Missing Relative Parent):</strong> Nếu quên không đặt <code>position: relative</code> cho phần tử cha, thẻ <code>absolute</code> sẽ vô tình bám theo <code>&lt;html&gt;</code>. Khi deploy và mở trên các màn hình có tỉ lệ khác (ultrawide, tablet, mobile), phần tử sẽ văng ra ngoài khung hình.</li>
+          <li><strong>Nguy cơ che đè nội dung (Overlap Glitch):</strong> Vì <code>absolute</code> không chiếm chỗ, chiều cao của thẻ cha có thể bị sụt về 0px nếu chỉ chứa các con <code>absolute</code>. Các thành phần bên dưới sẽ trồi lên đè vào nhau.</li>
+          <li><strong>Giải pháp chuẩn Responsive:</strong> Ưu tiên dùng <strong>Flexbox / CSS Grid</strong> cho toàn bộ layout xương sống (page structure). Chỉ sử dụng <code>absolute</code> cho các chi tiết trang trí cục bộ (badge, tooltip, nút đóng modal, icon overlay) khi đã bọc bên trong một container <code>relative</code>.</li>
+        </ul>
+      </article>
+
+      <!-- ==================== CÂU 2 ==================== -->
+      <article class="card" style="margin-bottom: 2.5rem;" id="cau-2">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <span class="brand-badge" style="font-size: 0.85rem; padding: 0.3rem 0.7rem;">CÂU HỎI 2</span>
+          <h2 style="font-size: 1.45rem; color: #fff;">Quy trình Đăng ký Domain, Hosting, DNS, Đề xuất Triển khai & Rủi ro Bảo mật</h2>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">1. Ba bước chuẩn để đưa một Website lên Internet</h3>
+        <ol style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8; margin-bottom: 1.25rem;">
+          <li><strong>Đăng ký Domain (Tên miền):</strong> Mua định danh địa chỉ web (ví dụ: <code>mssv-portfolio.com</code>) từ các nhà đăng ký được ICANN công nhận (như Namecheap, GoDaddy, Mắt Bão, PA Việt Nam).</li>
+          <li><strong>Thuê Hosting / Máy chủ Web:</strong> Thuê không gian lưu trữ trực tuyến hoạt động 24/7 để chứa mã nguồn (HTML, CSS, JS, hình ảnh, cơ sở dữ liệu) và chạy phần mềm web server (Nginx, Apache hoặc Static CDN).</li>
+          <li><strong>Cấu hình DNS (Hệ thống phân giải tên miền):</strong>
+            <ul style="padding-left: 1.25rem; margin-top: 0.4rem;">
+              <li>Tạo bản ghi <strong>A Record:</strong> Trỏ tên miền trực tiếp tới địa chỉ IPv4 của Hosting (ví dụ: <code>@ &rarr; 192.0.2.1</code>).</li>
+              <li>Tạo bản ghi <strong>CNAME Record:</strong> Định tuyến tên miền phụ (subdomain) sang tên miền chính hoặc máy chủ dịch vụ (ví dụ: <code>www &rarr; yourusername.github.io</code>).</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">2. Đề xuất nền tảng miễn phí phù hợp nhất cho sinh viên: GitHub Pages & Netlify</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">GitHub Pages</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              • Hoàn toàn miễn phí, tích hợp sẵn với Git Repository.<br>
+              • Tự động kích hoạt chứng chỉ SSL/HTTPS miễn phí.<br>
+              • Cực kỳ tối ưu cho các dự án tĩnh (HTML/CSS/JS thuần, đồ án học phần).<br>
+              • Domain mặc định: <code>username.github.io/repo-name/</code>.
+            </p>
+          </div>
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Netlify / Vercel</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              • Hỗ trợ CI/CD tự động: Commit code lên GitHub là tự động Build & Deploy.<br>
+              • Cung cấp Deploy Previews cho từng Pull Request.<br>
+              • Mạng lưới CDN toàn cầu với tốc độ truy xuất cực nhanh.<br>
+              • Quản lý biến môi trường (Environment Variables) an toàn.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">3. Rủi ro an ninh mạng cần phòng tránh</h3>
+        <ul style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong>Thiếu mã hóa SSL/HTTPS:</strong> Nếu website chạy trên giao thức HTTP cũ (cổng 80), mọi dữ liệu truyền giữa client và server (mật khẩu, form dữ liệu) đều ở dạng plain text, dễ bị tấn công nghe lén (Man-in-the-Middle - MitM). Cần luôn bật tính năng <em>Enforce HTTPS</em>.</li>
+          <li><strong>Lộ lọt thông tin nhạy cảm lên Git:</strong> Tuyệt đối không commit các file chứa API Key bí mật, mật khẩu cơ sở dữ liệu hoặc thông tin người dùng vào public repository. Luôn dùng file <code>.gitignore</code>.</li>
+          <li><strong>Nguy cơ Subdomain Takeover:</strong> Xảy ra khi bản ghi DNS CNAME vẫn trỏ tới một hosting hoặc bucket đã bị xóa hoặc ngưng gia hạn, cho phép kẻ tấn công đăng ký lại dịch vụ đó để chiếm quyền điều khiển tên miền.</li>
+        </ul>
+      </article>
+
+      <!-- ==================== CÂU 3 ==================== -->
+      <article class="card" style="margin-bottom: 2.5rem;" id="cau-3">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <span class="brand-badge" style="font-size: 0.85rem; padding: 0.3rem 0.7rem;">CÂU HỎI 3</span>
+          <h2 style="font-size: 1.45rem; color: #fff;">So Sánh LET, CONST, VAR (Scope, Hoisting), Ví Dụ Lỗi Điển Hình & Kỹ Thuật Debug Bằng Chrome DevTools</h2>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">1. Bảng so sánh toàn diện: Scope, Hoisting & Re-assignment</h3>
+        <div class="table-responsive" style="margin-bottom: 1.5rem;">
+          <table class="table-custom">
+            <thead>
+              <tr>
+                <th>Từ khóa</th>
+                <th>Phạm vi (Scope)</th>
+                <th>Cơ chế Hoisting</th>
+                <th>Tái khai báo & Gán lại</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>var</code></td>
+                <td><strong>Function Scope</strong> (hoặc Global nếu khai báo ngoài hàm). Bỏ qua khối lệnh <code>{}</code> như <code>if</code>, <code>for</code>.</td>
+                <td>Được hoisted lên đầu scope và khởi tạo giá trị mặc định là <code>undefined</code>. Truy cập trước khi khai báo không bị crash code.</td>
+                <td>Cho phép khai báo lại nhiều lần trong cùng scope; cho phép gán lại giá trị.</td>
+              </tr>
+              <tr>
+                <td><code>let</code></td>
+                <td><strong>Block Scope</strong> (chỉ tồn tại bên trong cặp ngoặc nhọn <code>{ ... }</code>).</td>
+                <td>Được hoisted nhưng nằm trong vùng chết tạm thời <strong>Temporal Dead Zone (TDZ)</strong>. Truy cập trước khi khai báo sẽ ném lỗi <code>ReferenceError</code>.</td>
+                <td>Không cho phép khai báo lại trong cùng scope; cho phép gán lại giá trị.</td>
+              </tr>
+              <tr>
+                <td><code>const</code></td>
+                <td><strong>Block Scope</strong> (chỉ tồn tại bên trong cặp ngoặc nhọn <code>{ ... }</code>).</td>
+                <td>Tương tự <code>let</code>, nằm trong <strong>Temporal Dead Zone (TDZ)</strong> trước khi tới dòng code khai báo.</td>
+                <td>Không cho phép khai báo lại; <strong>không cho phép gán lại tham chiếu</strong> (nhưng các thuộc tính của Object/Array vẫn mutate được). Bắt buộc phải gán giá trị khi khởi tạo.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">2. Ví dụ lỗi logic kinh điển: Closure trong vòng lặp bất đồng bộ</h3>
+        <p style="color: var(--text-muted); margin-bottom: 0.5rem;">
+          Đoạn code dưới đây minh họa sai lầm rất phổ biến khi dùng <code>var</code> và cách khắc phục triệt để bằng <code>let</code>:
+        </p>
+
+        <pre><code>// ❌ LỖI LOGIC VỚI VAR:
+for (var i = 1; i <= 3; i++) {
+  setTimeout(() => {
+    console.log("var i:", i);
+  }, 100);
+}
+// KẾT QUẢ IN RA: 4, 4, 4
+// Giải thích: Do 'var' có function scope, biến 'i' bị chia sẻ chung. Khi timer chạy xong,
+// vòng lặp đã kết thúc và i đã đạt giá trị 4.
+
+// ✅ KHẮC PHỤC HOÀN TOÀN BẰNG LET:
+for (let j = 1; j <= 3; j++) {
+  setTimeout(() => {
+    console.log("let j:", j);
+  }, 100);
+}
+// KẾT QUẢ IN RA: 1, 2, 3
+// Giải thích: 'let' có block scope, mỗi vòng lặp tạo ra một phạm vi mới lưu giữ giá trị j độc lập.</code></pre>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">3. Quy trình từng bước Debug bằng Chrome DevTools</h3>
+        <ol style="color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8;">
+          <li><strong>Mở công cụ DevTools:</strong> Bấm phím <code>F12</code> (hoặc tổ hợp <code>Ctrl + Shift + I</code> trên Windows), chọn tab <strong>Sources</strong>.</li>
+          <li><strong>Đặt Breakpoint (Điểm ngắt):</strong> Điều hướng cây thư mục bên trái để mở file script cần kiểm tra. Nhấn chuột vào số dòng code (Line Number) muốn dừng thực thi để đặt Breakpoint màu xanh.</li>
+          <li><strong>Kích hoạt thực thi:</strong> Thao tác trên giao diện web (click nút, submit form, gõ phím) để trình duyệt chạy code đến dòng breakpoint và tạm dừng chương trình.</li>
+          <li><strong>Quan sát bảng điều khiển Scope:</strong> Nhìn sang cột phải tab <strong>Scope</strong> để kiểm tra giá trị của các biến trong:
+            <ul style="padding-left: 1.25rem;">
+              <li><strong>Local Scope:</strong> Biến bên trong hàm đang chạy.</li>
+              <li><strong>Block Scope:</strong> Biến khai báo bằng <code>let/const</code> trong khối hiện tại.</li>
+              <li><strong>Global Scope:</strong> Biến toàn cục (đối tượng <code>window</code>).</li>
+            </ul>
+          </li>
+          <li><strong>Điều khiển từng bước lệnh:</strong>
+            <ul style="padding-left: 1.25rem;">
+              <li><code>F10</code> (Step over): Thực thi sang dòng lệnh kế tiếp.</li>
+              <li><code>F11</code> (Step into): Đi sâu vào bên trong thân hàm được gọi.</li>
+              <li><code>Shift + F11</code> (Step out): Thực thi hết hàm hiện tại và quay về hàm cha.</li>
+            </ul>
+          </li>
+          <li><strong>Theo dõi linh hoạt với Watch & Console:</strong> Thêm các biểu thức cần kiểm tra vào tab <strong>Watch</strong> hoặc gõ lệnh trực tiếp vào tab <strong>Console</strong> dưới đáy để kiểm tra giá trị thời gian thực mà không cần dùng <code>console.log</code> thủ công.</li>
+        </ol>
+      </article>
+
+      <!-- ==================== CÂU 4 ==================== -->
+      <article class="card" id="cau-4">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <span class="brand-badge" style="font-size: 0.85rem; padding: 0.3rem 0.7rem;">CÂU HỎI 4</span>
+          <h2 style="font-size: 1.45rem; color: #fff;">Cơ Chế Event Delegation (Ủy Quyền Sự Kiện), Ví Dụ Danh Sách Động & Phân Tích Lợi Ích Tối Ưu</h2>
+        </div>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">1. Nguyên lý vận hành: Dựa trên Event Bubbling (Nổi bọt sự kiện)</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1rem;">
+          Khi một sự kiện xảy ra trên một phần tử DOM (ví dụ: click vào thẻ <code>&lt;button&gt;</code>), sự kiện đó không dừng lại tại chỗ mà sẽ lan truyền ngược lên các phần tử cha tổ tiên: <code>button &rarr; li &rarr; ul &rarr; main &rarr; body &rarr; document &rarr; window</code>. 
+          Hiện tượng này gọi là <strong>Event Bubbling</strong>.
+          <br><br>
+          <strong>Event Delegation</strong> là kỹ thuật tận dụng sự nổi bọt: Thay vì gắn hàng trăm Event Listener lên từng phần tử con, ta chỉ cần gắn <strong>một Event Listener duy nhất</strong> lên phần tử cha chung, rồi sử dụng thuộc tính <code>e.target</code> hoặc hàm <code>e.target.closest()</code> để xác định chính xác phần tử con nào đã phát sinh sự kiện.
+        </p>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">2. Minh họa Code thực tế: Quản lý Danh sách động (Thêm / Xóa Item)</h3>
+        <pre><code>// HTML cấu trúc danh sách cha:
+// &lt;ul id="esports-roster"&gt;
+//   &lt;li data-id="1"&gt;Bâng &lt;button class="btn-kick"&gt;Xóa&lt;/button&gt;&lt;/li&gt;
+// &lt;/ul&gt;
+
+const rosterList = document.getElementById('esports-roster');
+
+// ✅ ÁP DỤNG EVENT DELEGATION: Chỉ gắn 1 listener duy nhất trên thẻ cha &lt;ul&gt;
+rosterList.addEventListener('click', function(event) {
+  // Tìm nút bấm xóa gần nhất được click
+  const kickBtn = event.target.closest('.btn-kick');
+  
+  if (kickBtn) {
+    // Tìm phần tử li tương ứng để xóa
+    const memberItem = kickBtn.closest('li');
+    if (memberItem) {
+      console.log('Đã xóa thành viên:', memberItem.dataset.id);
+      memberItem.remove();
+    }
+  }
+});
+
+// Khi thêm phần tử mới bằng JS:
+// rosterList.insertAdjacentHTML('beforeend', '&lt;li data-id="2"&gt;Fish &lt;button class="btn-kick"&gt;Xóa&lt;/button&gt;&lt;/li&gt;');
+// => Nút 'Xóa' của Fish TỰ ĐỘNG hoạt động mà KHÔNG CẦN addEventListener lại!</code></pre>
+
+        <h3 style="color: var(--accent-gold-light); font-size: 1.1rem; margin: 1.25rem 0 0.5rem;">3. Ba lợi ích tối ưu then chốt</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.15rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+            <h4 style="color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 0.35rem;">Tiết kiệm RAM & Tài nguyên</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Thay vì khởi tạo 1.000 hàm lắng nghe sự kiện trên 1.000 dòng dữ liệu, chỉ cần 1 hàm duy nhất trên thẻ cha. Giảm tải đáng kể bộ nhớ trình duyệt.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.15rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔄</div>
+            <h4 style="color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 0.35rem;">Hỗ trợ tuyệt đối Dynamic DOM</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Dữ liệu tải thêm qua AJAX/API hoặc người dùng tạo mới đều tự động thừa hưởng sự kiện ngay lập tức mà không cần viết hàm re-bind listener.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.15rem;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+            <h4 style="color: var(--accent-gold); font-size: 0.95rem; margin-bottom: 0.35rem;">Chống Rò Rỉ Bộ Nhớ (Memory Leak)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Khi xóa thẻ con khỏi DOM, không bị tình trạng bộ thu gom rác (Garbage Collector) giữ tham chiếu listener mồ côi, giữ ứng dụng luôn mượt mà.
+            </p>
+          </div>
+
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Bài thi môn: <strong>Lập Trình Web (Học phần 701)</strong> — Đề số 1</p>
+      <p>Thực hiện bởi: <span class="footer-highlight">Lê Minh Tài</span> | Mã SV: <span class="footer-highlight">241A010794</span></p>
+    </div>
+  </footer>
+
+</body>
+</html>

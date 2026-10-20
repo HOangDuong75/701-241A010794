@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông Tin Điểm Danh - Đề thi Lập trình Web</title>
+  <meta name="description" content="Thông tin điểm danh sinh viên - Lê Minh Tài, Mã SV: 241A010794, Lớp 701.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION MENU -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="brand-badge">WEB 701</span>
+        <span>Lê Minh Tài</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="about.html" class="nav-link" id="nav-about">Trả lời Lý thuyết</a></li>
+          <li><a href="baitap23.html" class="nav-link" id="nav-bt23">Bài tập 23</a></li>
+          <li><a href="baitap22.html" class="nav-link" id="nav-bt22">Bài tập 22</a></li>
+          <li><a href="contact.html" class="nav-link active" id="nav-contact">Thông tin Điểm danh</a></li>
+          <li><a href="baitap01.html" class="nav-link" id="nav-bt01">Bài tập 1 - Sản phẩm</a></li>
+          <li><a href="baitap02.html" class="nav-link" id="nav-bt02">Bài tập 2 - Form</a></li>
+          <li><a href="baitap03.html" class="nav-link" id="nav-bt03">Bài tập 3 - Đồng hồ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-badge">Hồ Sơ Sinh Viên</span>
+        <h1 class="page-title">Thông Tin Điểm Danh Dự Thi</h1>
+        <p class="page-desc">Hồ sơ xác thực thông tin thí sinh tham dự kỳ thi kết thúc học phần Lập trình Web (Mã lớp 701). Phong cách thẻ bài Gamer eSports.</p>
+      </section>
+
+      <!-- PROFILE CARD CONTAINER -->
+      <div class="profile-card-container">
+        <article class="gamer-card">
+          
+          <!-- BANNER HEADER -->
+          <div class="gamer-banner">
+            <div class="gamer-rank-badge">
+              <span>🏆</span>
+              <span>CHALLENGER (THÁCH ĐẤU)</span>
+            </div>
+          </div>
+
+          <!-- AVATAR WRAPPER -->
+          <div class="avatar-wrapper">
+            <!-- Thẻ img trỏ tới images/avatar.jpg theo đúng yêu cầu đề bài -->
+            <img 
+              src="images/avatar.jpg" 
+              alt="Ảnh đại diện sinh viên Lê Minh Tài" 
+              class="avatar-img"
+              id="student-avatar"
+            >
+            <span class="gamer-status-dot" title="Trạng thái: Trực tuyến sẵn sàng thi đấu"></span>
+          </div>
+
+          <!-- GAMER TITLE & NICKNAME -->
+          <div style="text-align: center; padding: 0 1.5rem;">
+            <h2 style="font-size: 1.65rem; color: #fff; margin-bottom: 0.25rem;">
+              Lê Minh Tài
+            </h2>
+            <p style="color: var(--accent-gold-light); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;">
+              Pro Frontend Web Developer • Clan Captain
+            </p>
+          </div>
+
+          <!-- GAMER INFO LIST (GRID) -->
+          <div class="gamer-info-list">
+            
+            <div class="gamer-info-item">
+              <div class="gamer-info-label">👤 Họ và Tên Thí Sinh</div>
+              <div class="gamer-info-val">Lê Minh Tài (Thí sinh dự thi)</div>
+            </div>
+
+            <div class="gamer-info-item">
+              <div class="gamer-info-label">🆔 Mã Số Sinh Viên</div>
+              <div class="gamer-info-val" style="color: var(--accent-gold); font-family: var(--font-code);">241A010794</div>
+            </div>
+
+            <div class="gamer-info-item">
+              <div class="gamer-info-label">🏫 Lớp Học Phần</div>
+              <div class="gamer-info-val">701 - Lập trình Web (Đề số 1)</div>
+            </div>
+
+            <div class="gamer-info-item">
+              <div class="gamer-info-label">🎮 Biệt Danh Thi Đấu</div>
+              <div class="gamer-info-val" style="color: var(--accent-gold-light);">Lê Minh Tài</div>
+            </div>
+
+            <div class="gamer-info-item" style="grid-column: 1 / -1;">
+              <div class="gamer-info-label">🌐 URL Deploy Trực Tuyến (GitHub Pages)</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.35rem;">
+                <a 
+                  href="https://username.github.io/701-241A010794/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  id="deploy-link"
+                  style="font-family: var(--font-code); font-size: 0.95rem; color: #38bdf8; word-break: break-all;"
+                >
+                  https://username.github.io/701-241A010794/
+                </a>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-copy-url" style="font-size: 0.75rem;">
+                  📋 Sao Chép Link
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TRANG BỊ & KỸ NĂNG (GAMER STATS) -->
+          <div style="padding: 0 1.5rem 1.75rem;">
+            <div style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 0.75rem;">
+              ⚔️ Trang Bị & Kỹ Năng Đồ Án
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <span style="background: rgba(245, 158, 11, 0.12); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.3rem 0.65rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;">HTML5 Semantics</span>
+              <span style="background: rgba(245, 158, 11, 0.12); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.3rem 0.65rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;">CSS3 Flexbox & Grid</span>
+              <span style="background: rgba(245, 158, 11, 0.12); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.3rem 0.65rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;">JavaScript ES6+</span>
+              <span style="background: rgba(245, 158, 11, 0.12); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.3rem 0.65rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;">XSS Prevention</span>
+              <span style="background: rgba(245, 158, 11, 0.12); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); padding: 0.3rem 0.65rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;">LocalStorage API</span>
+            </div>
+          </div>
+
+          <!-- FOOTER ACTIONS -->
+          <div style="background: var(--bg-surface); padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color);">
+            <span style="font-size: 0.8rem; color: var(--text-dim);">Xác thực: Đã điểm danh hợp lệ ✅</span>
+            <a href="index.html" class="btn btn-primary btn-sm">
+              &larr; Về Menu Chính
+            </a>
+          </div>
+
+        </article>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- TOAST COPY NOTIFICATION -->
+  <div id="copy-toast" class="toast-notice">
+    <span>📋</span>
+    <span>Đã sao chép đường dẫn Deploy vào bộ nhớ tạm!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Bài thi môn: <strong>Lập Trình Web (Học phần 701)</strong> — Đề số 1</p>
+      <p>Thực hiện bởi: <span class="footer-highlight">Lê Minh Tài</span> | Mã SV: <span class="footer-highlight">241A010794</span></p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT SAO CHÉP URL DEPLOY -->
+  <script>
+    const btnCopyUrl = document.getElementById('btn-copy-url');
+    const deployLink = document.getElementById('deploy-link');
+    const copyToast = document.getElementById('copy-toast');
+
+    btnCopyUrl.addEventListener('click', async () => {
+      const url = deployLink.href;
+      try {
+        await navigator.clipboard.writeText(url);
+        showCopyToast();
+      } catch (err) {
+        // Fallback cho trình duyệt cũ
+        const tempInput = document.createElement('input');
+        tempInput.value = url;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showCopyToast();
+      }
+    });
+
+    function showCopyToast() {
+      copyToast.classList.add('show');
+      setTimeout(() => {
+        copyToast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+
+</body>
+</html>

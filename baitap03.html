@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bài tập 3: Đồng Hồ Đếm Ngược Countdown Timer - Đề thi Lập trình Web</title>
+  <meta name="description" content="Bài tập 3: Đồng hồ đếm ngược 10 phút dạng MM:SS, setInterval, còi báo động nhấp nháy đỏ khi dưới 1 phút, chống memory leak và đồng bộ server.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION MENU -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="brand-badge">WEB 701</span>
+        <span>Lê Minh Tài</span>
+      </a>
+
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="about.html" class="nav-link" id="nav-about">Trả lời Lý thuyết</a></li>
+          <li><a href="baitap23.html" class="nav-link" id="nav-bt23">Bài tập 23</a></li>
+          <li><a href="baitap22.html" class="nav-link" id="nav-bt22">Bài tập 22</a></li>
+          <li><a href="contact.html" class="nav-link" id="nav-contact">Thông tin Điểm danh</a></li>
+          <li><a href="baitap01.html" class="nav-link" id="nav-bt01">Bài tập 1 - Sản phẩm</a></li>
+          <li><a href="baitap02.html" class="nav-link" id="nav-bt02">Bài tập 2 - Form</a></li>
+          <li><a href="baitap03.html" class="nav-link active" id="nav-bt03">Bài tập 3 - Đồng hồ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="container" style="max-width: 860px;">
+      
+      <!-- PAGE HEADER -->
+      <section class="page-header">
+        <span class="page-badge">Bài Tập Thực Hành 03</span>
+        <h1 class="page-title">Đồng Hồ Đếm Ngược eSports Match Timer</h1>
+        <p class="page-desc">Hệ thống đếm ngược 10 phút dạng chuẩn MM:SS sử dụng setInterval. Kích hoạt hiệu ứng còi cảnh báo nhấp nháy đỏ khi dưới 1 phút và dừng chính xác tại 00:00.</p>
+      </section>
+
+      <!-- TIMER DISPLAY CARD -->
+      <div class="card timer-container">
+        
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+          <span id="timer-status-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+            ⏸️ Đang Tạm Dừng
+          </span>
+          <span id="warning-text" style="color: var(--color-danger); font-size: 0.85rem; font-weight: 700; display: none;">
+            ⚠️ CẢNH BÁO: THỜI GIAN CÒN DƯỚI 1 PHÚT!
+          </span>
+        </div>
+
+        <!-- MÀN HÌNH HIỂN THỊ ĐỒNG HỒ MM:SS -->
+        <div id="timer-display" class="timer-display" aria-label="Màn hình đếm ngược">
+          10:00
+        </div>
+
+        <!-- CÁC NÚT ĐIỀU KHIỂN CHÍNH -->
+        <div class="timer-controls">
+          <button type="button" class="btn btn-primary" id="btn-start">
+            ▶️ Bắt Đầu Đếm
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-pause" disabled>
+            ⏸️ Tạm Dừng
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-reset">
+            🔄 Đặt Lại (10:00)
+          </button>
+        </div>
+
+        <!-- PHÍM TẮT TEST NHANH CHO GIẢNG VIÊN CHẤM BÀI -->
+        <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px dashed var(--border-color); width: 100%; text-align: center;">
+          <span style="font-size: 0.8rem; color: var(--text-dim); display: block; margin-bottom: 0.5rem;">
+            ⚡ Phím tắt hỗ trợ kiểm thử nhanh (Không cần đợi đủ 10 phút):
+          </span>
+          <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" id="btn-test-alert">
+              🚨 Đặt về 00:59 (Test nhấp nháy đỏ)
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-test-end">
+              ⏱️ Đặt về 00:03 (Test hết giờ Alert)
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ĐẶC BIỆT: GIẢI THÍCH LOGIC TƯ DUY -->
+      <section class="logic-explanation-box">
+        <h3 class="logic-box-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2 18H10v-1h4v1zm0-3H10v-1h4v1zm-2-15C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
+          Giải thích logic tư duy: Dọn dẹp bộ nhớ (Chống Memory Leak) & Đồng bộ thời gian Server
+        </h3>
+        <ul>
+          <li>
+            <strong>1. Kỹ thuật quản lý và dọn dẹp bộ nhớ (Prevent Memory Leaks):</strong><br>
+            • <em>Rủi ro tiềm ẩn:</em> Hàm <code>setInterval()</code> trả về một mã định danh (Timer ID). Nếu người dùng bấm nút "Bắt đầu" nhiều lần liên tiếp mà không kiểm tra, trình duyệt sẽ tạo ra nhiều tiến trình timer chạy song song ngầm. Hậu quả là thời gian bị đếm nhảy cóc (nhanh gấp bội) và các hàm callback bị giữ lại trong bộ nhớ heap gây rò rỉ RAM (Memory Leak).<br>
+            • <em>Giải pháp xử lý triệt để:</em> Luôn lưu <code>timerId</code> vào một biến. Trước khi khởi tạo bất kỳ timer mới nào, bắt buộc phải gọi <code>clearInterval(timerId)</code>. Khi đồng hồ chạm <code>00:00</code> hoặc khi người dùng ấn "Tạm dừng" / "Đặt lại", ta lập tức gọi <code>clearInterval(timerId)</code> và gán <code>timerId = null</code> để Garbage Collector dọn dẹp tài nguyên.
+          </li>
+          <li>
+            <strong>2. Chiến lược đồng bộ thời gian Server thực tế khi Deploy (Server-Client Sync):</strong><br>
+            • <em>Vấn đề trôi thời gian (Timer Drift):</em> Trình duyệt hiện đại tự động giảm ưu tiên (throttle) các hàm <code>setInterval</code> xuống mức 1000ms hoặc tạm dừng hoàn toàn khi người dùng chuyển sang tab khác (Background Tab Throttling) hoặc máy tính chuyển sang chế độ ngủ (Sleep Mode). Nếu chỉ đếm lùi từng giây <code>remainingSeconds--</code>, đồng hồ trên client sẽ bị chậm hơn thực tế rất nhiều.<br>
+            • <em>Giải pháp đồng bộ mốc đích (Target Timestamp):</em> Thay vì đếm lùi máy móc, ta lưu mốc thời gian kết thúc tuyệt đối: <code>targetEndTime = Date.now() + duration</code>. Mỗi tick, đồng hồ tính lại: <code>remaining = Math.max(0, Math.floor((targetEndTime - Date.now()) / 1000))</code>. Dù người dùng ẩn tab hay máy bị lag, khi mở lại đồng hồ vẫn nhảy chính xác từng giây.<br>
+            • <em>Đồng bộ với Server (Chống gian lận Client):</em> Khi triển khai phòng thi trực tuyến hoặc giải đấu eSports, không được tin tưởng đồng hồ của máy tính người dùng (họ có thể chỉnh lùi giờ hệ điều hành). Hệ thống cần gọi API để lấy <code>serverTimestamp</code> chuẩn lúc bắt đầu và tính toán độ trễ mạng (Network Latency Offset), hoặc truyền tín hiệu thời gian thực qua kênh kết nối <strong>WebSocket / SSE</strong>.
+          </li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Bài thi môn: <strong>Lập Trình Web (Học phần 701)</strong> — Đề số 1</p>
+      <p>Thực hiện bởi: <span class="footer-highlight">Lê Minh Tài</span> | Mã SV: <span class="footer-highlight">241A010794</span></p>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT XỬ LÝ ĐỒNG HỒ ĐẾM NGƯỢC -->
+  <script>
+    // 1. CÁC HẰNG SỐ VÀ THAM CHIẾU DOM
+    const INITIAL_SECONDS = 10 * 60; // 10 phút = 600 giây
+    let remainingSeconds = INITIAL_SECONDS;
+    let timerInterval = null; // Biến lưu Timer ID để dọn dẹp bộ nhớ
+
+    const timerDisplay = document.getElementById('timer-display');
+    const timerStatusBadge = document.getElementById('timer-status-badge');
+    const warningText = document.getElementById('warning-text');
+    const btnStart = document.getElementById('btn-start');
+    const btnPause = document.getElementById('btn-pause');
+    const btnReset = document.getElementById('btn-reset');
+    const btnTestAlert = document.getElementById('btn-test-alert');
+    const btnTestEnd = document.getElementById('btn-test-end');
+
+    // 2. HÀM ĐỊNH DẠNG THỜI GIAN DẠNG MM:SS
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+
+      // Đảm bảo luôn hiển thị 2 chữ số (ví dụ: 09:05)
+      const paddedMinutes = String(minutes).padStart(2, '0');
+      const paddedSeconds = String(seconds).padStart(2, '0');
+
+      return `${paddedMinutes}:${paddedSeconds}`;
+    }
+
+    // 3. HÀM CẬP NHẬT GIAO DIỆN HIỂN THỊ VÀ CẢNH BÁO
+    function updateDisplay() {
+      timerDisplay.textContent = formatTime(remainingSeconds);
+
+      // Khi thời gian < 1 phút (từ 59 giây trở xuống) và còn > 0 giây:
+      // Kích hoạt CSS animation nhấp nháy liên tục (đỏ còi báo động)
+      if (remainingSeconds < 60 && remainingSeconds > 0) {
+        timerDisplay.classList.add('timer-alert-danger');
+        warningText.style.display = 'inline-block';
+      } else {
+        timerDisplay.classList.remove('timer-alert-danger');
+        warningText.style.display = 'none';
+      }
+    }
+
+    // 4. BƯỚC ĐẾM LÙI TỪNG GIÂY
+    function tick() {
+      if (remainingSeconds > 0) {
+        remainingSeconds--;
+        updateDisplay();
+      }
+
+      // KHI HẾT GIỜ (00:00)
+      if (remainingSeconds <= 0) {
+        // DỪNG THỜI GIAN NGAY LẬP TỨC ĐỂ CHỐNG MEMORY LEAK
+        stopTimer();
+        
+        timerDisplay.classList.remove('timer-alert-danger');
+        timerStatusBadge.textContent = '🏁 Đã Kết Thúc';
+        timerStatusBadge.style.color = '#ef4444';
+        timerStatusBadge.style.borderColor = '#ef4444';
+        timerStatusBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+
+        btnStart.disabled = true;
+        btnPause.disabled = true;
+
+        // Cho một khoảng trễ cực nhỏ (50ms) để DOM kịp vẽ 00:00 trước khi popup alert chặn luồng UI
+        setTimeout(() => {
+          alert('Hết thời gian!');
+        }, 50);
+      }
+    }
+
+    // 5. HÀM BẮT ĐẦU ĐẾM NGƯỢC
+    function startTimer() {
+      if (timerInterval !== null) {
+        // Đã có timer đang chạy, không tạo thêm để tránh rò rỉ bộ nhớ
+        return;
+      }
+
+      // Đổi trạng thái nút bấm
+      btnStart.disabled = true;
+      btnPause.disabled = false;
+      timerStatusBadge.textContent = '🟢 Đang Đếm Ngược';
+      timerStatusBadge.style.color = '#10b981';
+      timerStatusBadge.style.borderColor = '#10b981';
+      timerStatusBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+
+      // Khởi tạo tiến trình setInterval lặp lại mỗi 1000ms (1 giây)
+      timerInterval = setInterval(tick, 1000);
+    }
+
+    // 6. HÀM TẠM DỪNG / DỌN DẸP INTERVAL
+    function stopTimer() {
+      if (timerInterval !== null) {
+        clearInterval(timerInterval); // Giải phóng tài nguyên khỏi bộ nhớ heap
+        timerInterval = null;         // Đưa về null để Garbage Collector xử lý
+      }
+
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+    }
+
+    // Sự kiện Tạm dừng
+    btnPause.addEventListener('click', () => {
+      stopTimer();
+      timerStatusBadge.textContent = '⏸️ Đang Tạm Dừng';
+      timerStatusBadge.style.color = 'var(--accent-gold)';
+      timerStatusBadge.style.borderColor = 'var(--accent-gold)';
+      timerStatusBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+    });
+
+    // 7. HÀM ĐẶT LẠI (RESET)
+    function resetTimer(newSeconds = INITIAL_SECONDS) {
+      stopTimer();
+      remainingSeconds = newSeconds;
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+      timerStatusBadge.textContent = '⏸️ Đang Tạm Dừng';
+      timerStatusBadge.style.color = 'var(--accent-gold)';
+      timerStatusBadge.style.borderColor = 'var(--accent-gold)';
+      timerStatusBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+      updateDisplay();
+    }
+
+    // Gán các sự kiện điều khiển
+    btnStart.addEventListener('click', startTimer);
+    btnReset.addEventListener('click', () => resetTimer(INITIAL_SECONDS));
+
+    // Nút test nhanh: 59 giây để kiểm tra còi báo động nhấp nháy đỏ
+    btnTestAlert.addEventListener('click', () => {
+      resetTimer(59);
+      startTimer();
+    });
+
+    // Nút test nhanh: 3 giây để kiểm tra sự kiện dừng và alert("Hết thời gian!")
+    btnTestEnd.addEventListener('click', () => {
+      resetTimer(3);
+      startTimer();
+    });
+
+    // Khởi tạo hiển thị ban đầu 10:00
+    updateDisplay();
+  </script>
+
+</body>
+</html>
